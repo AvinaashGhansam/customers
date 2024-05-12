@@ -1,5 +1,7 @@
 package com.ag.customers.customer;
 
+import com.ag.customers.exceptions.ResourceNotFound;
+import org.springframework.beans.factory.annotation.Qualifier;
 import org.springframework.stereotype.Service;
 
 import java.util.List;
@@ -12,7 +14,7 @@ import java.util.List;
 public class CustomerService {
     private final CustomerDao customerDao;
 
-    public CustomerService(CustomerDao customerDao) {
+    public CustomerService(@Qualifier("jpa") CustomerDao customerDao) {
         this.customerDao = customerDao;
     }
 
@@ -20,6 +22,6 @@ public class CustomerService {
         return customerDao.selectAllCustomers();
     }
     public Customer getCustomerById(Integer id) {
-        return customerDao.selectCustomerById(id).orElseThrow(() -> new IllegalArgumentException(" customer with [%s] not found".formatted(id)));
+        return customerDao.selectCustomerById(id).orElseThrow(() -> new ResourceNotFound(" customer with id[%s] not found".formatted(id)));
     }
 }
