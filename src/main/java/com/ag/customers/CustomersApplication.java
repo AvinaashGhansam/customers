@@ -7,6 +7,6 @@ import org.springframework.boot.autoconfigure.SpringBootApplication;
 public class CustomersApplication {
     public static void main(String[] args) {
         SpringApplication.run(CustomersApplication.class, args);
-        // TODO: CRUD - CREATE
+        // TODO: CRUD - UPDATE
     }
 }
