@@ -28,4 +28,14 @@ public class CustomerListDataAccessService implements CustomerDao {
                 .filter((customer -> customer.getId().equals(id)))
                 .findFirst();
     }
+
+    @Override
+    public void insertCustomer(Customer customer) {
+        customers.add(customer);
+    }
+
+    @Override
+    public boolean existsPersonWithEmail(String email) {
+        return customers.stream().anyMatch(customer -> customer.getEmail().equals(email));
+    }
 }
