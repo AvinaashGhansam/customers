@@ -1,6 +1,12 @@
-package com.ag.customers.customer;
+package com.ag.customers.customer.service;
 
+import com.ag.customers.customer.repository.CustomerDao;
+import com.ag.customers.customer.repository.CustomerRepository;
+import com.ag.customers.customer.Customer;
+import com.ag.customers.dto.CustomerRegistrationRequest;
+import com.ag.customers.dto.CustomerUpdateRequest;
 import com.ag.customers.exceptions.DuplicateResourceException;
+import com.ag.customers.exceptions.RequestValidationException;
 import com.ag.customers.exceptions.ResourceNotFoundException;
 import org.springframework.beans.factory.annotation.Qualifier;
 import org.springframework.stereotype.Service;
@@ -45,4 +51,33 @@ public class CustomerService {
        customerDao.deleteCustomerById(id);
     }
 
+    public void updateCustomer(Integer id, CustomerUpdateRequest customerUpdateRequest) {
+        Customer customer = getCustomerById(id);
+
+        boolean changes = false;
+
+        if (customerUpdateRequest.name() != null && !customerUpdateRequest.name().equals(customer.getName())) {
+            customer.setName(customerUpdateRequest.name());
+            changes = true;
+        }
+
+        if (customerUpdateRequest.email() != null && !customerUpdateRequest.email().equals(customer.getEmail())) {
+            if (customerDao.existsPersonWithEmail(customerUpdateRequest.email())) {
+                throw new DuplicateResourceException("Email %s already exist".formatted(customerUpdateRequest.email()));
+            }
+            customer.setEmail(customerUpdateRequest.email());
+            changes = true;
+        }
+
+        if (customerUpdateRequest.age() != null && !customerUpdateRequest.age().equals(customer.getAge())) {
+            customer.setAge(customerUpdateRequest.age());
+            changes = true;
+        }
+
+        // if no change exist
+        if (!changes) {
+            throw new RequestValidationException("No data changes found");
+        }
+        customerDao.updateCustomer(customer);
+    }
 }

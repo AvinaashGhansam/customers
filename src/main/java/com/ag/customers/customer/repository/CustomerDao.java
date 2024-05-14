@@ -1,4 +1,6 @@
-package com.ag.customers.customer;
+package com.ag.customers.customer.repository;
+
+import com.ag.customers.customer.Customer;
 
 import java.util.List;
 import java.util.Optional;
@@ -13,4 +15,5 @@ public interface CustomerDao {
     boolean existsPersonWithEmail(String email);
     void deleteCustomerById(Integer id);
     boolean existsPersonById(Integer id);
+    void updateCustomer(Customer updatedCustomer);
 }

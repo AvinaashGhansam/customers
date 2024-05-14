@@ -1,5 +1,8 @@
-package com.ag.customers.customer;
+package com.ag.customers.customer.service;
 
+import com.ag.customers.customer.repository.CustomerDao;
+import com.ag.customers.customer.repository.CustomerRepository;
+import com.ag.customers.customer.Customer;
 import org.springframework.stereotype.Repository;
 
 import java.util.List;
@@ -40,5 +43,11 @@ public class CustomerJPADataAccessService implements CustomerDao {
     @Override
     public boolean existsPersonById(Integer id) {
        return customerRepository.existsCustomerById(id);
+    }
+
+    @Override
+    public void updateCustomer(Customer updatedCustomer) {
+        // update the customer
+        customerRepository.save(updatedCustomer);
     }
 }

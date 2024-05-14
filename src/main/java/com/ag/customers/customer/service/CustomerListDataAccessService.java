@@ -1,5 +1,7 @@
-package com.ag.customers.customer;
+package com.ag.customers.customer.service;
 
+import com.ag.customers.customer.repository.CustomerDao;
+import com.ag.customers.customer.Customer;
 import org.springframework.stereotype.Repository;
 
 import java.util.ArrayList;
@@ -47,5 +49,10 @@ public class CustomerListDataAccessService implements CustomerDao {
     @Override
     public boolean existsPersonById(Integer id) {
        return customers.stream().anyMatch(customer -> customer.getId().equals(id));
+    }
+
+    @Override
+    public void updateCustomer(Customer updatedCustomer) {
+        customers.add(updatedCustomer);
     }
 }

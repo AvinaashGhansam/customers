@@ -1,5 +1,9 @@
-package com.ag.customers.customer;
+package com.ag.customers.customer.controller;
 
+import com.ag.customers.customer.service.CustomerService;
+import com.ag.customers.customer.Customer;
+import com.ag.customers.dto.CustomerRegistrationRequest;
+import com.ag.customers.dto.CustomerUpdateRequest;
 import org.springframework.web.bind.annotation.*;
 
 import java.util.List;
@@ -34,5 +38,10 @@ public class CustomerController {
    @DeleteMapping("{id}")
     public void deleteCustomer(@PathVariable("id") Integer id) {
         customerService.deleteCustomerById(id);
+   }
+
+   @PutMapping("{id}")
+    public void updateCustomerInformation(@PathVariable("id") Integer id,  @RequestBody CustomerUpdateRequest updateCustomerRequest) {
+        customerService.updateCustomer(id, updateCustomerRequest);
    }
 }
