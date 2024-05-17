@@ -1,6 +1,6 @@
-package com.ag.customers.customer.repository;
+package com.ag.customer.repository;
 
-import com.ag.customers.customer.Customer;
+import com.ag.customer.Customer;
 import org.springframework.jdbc.core.RowMapper;
 import org.springframework.stereotype.Component;
 
