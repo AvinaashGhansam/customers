@@ -1,13 +1,13 @@
-package com.ag.customers.customer.service;
+package com.ag.customer.service;
 
-import com.ag.customers.customer.repository.CustomerDao;
-import com.ag.customers.customer.repository.CustomerRepository;
-import com.ag.customers.customer.Customer;
-import com.ag.customers.dto.CustomerRegistrationRequest;
-import com.ag.customers.dto.CustomerUpdateRequest;
-import com.ag.customers.exceptions.DuplicateResourceException;
-import com.ag.customers.exceptions.RequestValidationException;
-import com.ag.customers.exceptions.ResourceNotFoundException;
+import com.ag.customer.repository.CustomerDao;
+import com.ag.customer.repository.CustomerRepository;
+import com.ag.customer.Customer;
+import com.ag.dto.CustomerRegistrationRequest;
+import com.ag.dto.CustomerUpdateRequest;
+import com.ag.exceptions.DuplicateResourceException;
+import com.ag.exceptions.RequestValidationException;
+import com.ag.exceptions.ResourceNotFoundException;
 import org.springframework.beans.factory.annotation.Qualifier;
 import org.springframework.stereotype.Service;
 

@@ -1,8 +1,8 @@
-package com.ag.customers.customer.service;
+package com.ag.customer.service;
 
-import com.ag.customers.customer.repository.CustomerDao;
-import com.ag.customers.customer.repository.CustomerRepository;
-import com.ag.customers.customer.Customer;
+import com.ag.customer.repository.CustomerRepository;
+import com.ag.customer.repository.CustomerDao;
+import com.ag.customer.Customer;
 import org.springframework.stereotype.Repository;
 
 import java.util.List;

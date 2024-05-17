@@ -1,9 +1,9 @@
-package com.ag.customers.customer.controller;
+package com.ag.customer.controller;
 
-import com.ag.customers.customer.service.CustomerService;
-import com.ag.customers.customer.Customer;
-import com.ag.customers.dto.CustomerRegistrationRequest;
-import com.ag.customers.dto.CustomerUpdateRequest;
+import com.ag.customer.service.CustomerService;
+import com.ag.customer.Customer;
+import com.ag.dto.CustomerRegistrationRequest;
+import com.ag.dto.CustomerUpdateRequest;
 import org.springframework.web.bind.annotation.*;
 
 import java.util.List;
