@@ -63,6 +63,7 @@ public class CustomerJDBCDataAccessService implements CustomerDao {
 
     @Override
     public boolean existsPersonById(Integer id) {
+        // TODO: Fix Method Name, not consistent
         String sql = """
         SELECT count(id) FROM customer WHERE id = ?;
         """;
