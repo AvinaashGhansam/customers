@@ -21,7 +21,7 @@ import java.util.List;
 public class CustomerService {
     private final CustomerDao customerDao;
 
-    public CustomerService(/*@Qualifier("jpa")*/ @Qualifier("jdbc") CustomerDao customerDao, CustomerRepository customerRepository) {
+    public CustomerService(@Qualifier("jpa") /*@Qualifier("jdbc")*/ CustomerDao customerDao, CustomerRepository customerRepository) {
         this.customerDao = customerDao;
     }
 

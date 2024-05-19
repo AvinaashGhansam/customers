@@ -22,7 +22,7 @@ public class CustomerJPADataAccessService implements CustomerDao {
 
     @Override
     public Optional<Customer> selectCustomerById(Integer id) {
-        return customerRepository.findById(id);
+        return customerRepository.findById(Math.toIntExact(id));
     }
 
     @Override
@@ -37,7 +37,7 @@ public class CustomerJPADataAccessService implements CustomerDao {
 
     @Override
     public void deleteCustomerById(Integer id) {
-        customerRepository.deleteById(id);
+        customerRepository.deleteById(Math.toIntExact(id));
     }
 
     @Override

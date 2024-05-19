@@ -9,6 +9,12 @@ spring:
     url: jdbc:postgresql://localhost:5432/customer
     username: avinaash
     password: password
+    driver-class-name: org.postgresql.Driver
+    hikari:
+      maximum-pool-size: 20
+      idle-timeout: 600000  # 10 minutes
+      max-lifetime: 1800000  # 30 minutes
+      connection-timeout: 30000  # 30 seconds
   jpa:
     hibernate:
       ddl-auto: validate

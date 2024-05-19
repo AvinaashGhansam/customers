@@ -15,14 +15,14 @@ import static org.assertj.core.api.Assertions.assertThat;
 
 
 class CustomerJDBCDataAccessServiceTest extends AbstractTestContainersUnitTest {
-    private CustomerJDBCDataAccessService customerJDBCDataAccessService;
+    private CustomerJDBCDataAccessService underTest;
     private final CustomerRowMapper customerRowMapper = new CustomerRowMapper();
 
     @BeforeEach
     void setUp() {
         // We do it like this because we want a new instance for each test
         // For the jdbc template we must define how we will connect to the database since it is not maintained by spring
-        customerJDBCDataAccessService = new CustomerJDBCDataAccessService(
+        underTest = new CustomerJDBCDataAccessService(
                 getJdbcTemplate(), customerRowMapper
         );
     }
@@ -31,9 +31,9 @@ class CustomerJDBCDataAccessServiceTest extends AbstractTestContainersUnitTest {
     void selectAllCustomers() {
         // Given
         Customer customer = generateCustomer();
-        customerJDBCDataAccessService.insertCustomer(customer);
+        underTest.insertCustomer(customer);
         // When
-        List<Customer> customers = customerJDBCDataAccessService.selectAllCustomers();
+        List<Customer> customers = underTest.selectAllCustomers();
         // Then
         assertThat(customers).isNotEmpty();
     }
@@ -49,8 +49,8 @@ class CustomerJDBCDataAccessServiceTest extends AbstractTestContainersUnitTest {
                 FAKER.name().fullName(),
                 email,
                 age);
-        customerJDBCDataAccessService.insertCustomer(customer);
-        Integer id = customerJDBCDataAccessService
+        underTest.insertCustomer(customer);
+        Integer id = underTest
                 .selectAllCustomers()
                 .stream()
                 .filter(c -> c.getEmail().equals(email)).map(Customer::getId)
@@ -58,7 +58,7 @@ class CustomerJDBCDataAccessServiceTest extends AbstractTestContainersUnitTest {
                 .orElseThrow();
         //
         // When
-        Optional<Customer> actualCustomer = customerJDBCDataAccessService.selectCustomerById(id);
+        Optional<Customer> actualCustomer = underTest.selectCustomerById(id);
         // Then
         assertThat(actualCustomer).isPresent().hasValueSatisfying(c -> {
             assertThat(c.getId()).isEqualTo(id);
@@ -69,9 +69,9 @@ class CustomerJDBCDataAccessServiceTest extends AbstractTestContainersUnitTest {
     @Test
     void willReturnEmptyWhenSelectCustomerById() {
         // Given
-        Integer id = -1;
+        int id = -1;
         // When
-        Optional<Customer> actual = customerJDBCDataAccessService.selectCustomerById(id);
+        Optional<Customer> actual = underTest.selectCustomerById(id);
         // Then
         assertThat(actual).isEmpty();
     }
@@ -81,9 +81,9 @@ class CustomerJDBCDataAccessServiceTest extends AbstractTestContainersUnitTest {
         // Given
         Customer customer = generateCustomer();
         // When
-        customerJDBCDataAccessService.insertCustomer(customer);
+        underTest.insertCustomer(customer);
         // Then
-        assertThat(customerJDBCDataAccessService.selectAllCustomers()).isNotEmpty();
+        assertThat(underTest.selectAllCustomers()).isNotEmpty();
     }
 
     @Test
@@ -91,9 +91,9 @@ class CustomerJDBCDataAccessServiceTest extends AbstractTestContainersUnitTest {
         // Given
         String email = FAKER.internet().emailAddress() + "-" + UUID.randomUUID();
         Customer customer = generateCustomer(email);
-        customerJDBCDataAccessService.insertCustomer(customer);
+        underTest.insertCustomer(customer);
         // When
-        boolean actual = customerJDBCDataAccessService.existsPersonWithEmail(email);
+        boolean actual = underTest.existsPersonWithEmail(email);
         // Then
         assertThat(actual).isTrue();
     }
@@ -103,7 +103,7 @@ class CustomerJDBCDataAccessServiceTest extends AbstractTestContainersUnitTest {
         // Given
         String email = FAKER.internet().emailAddress() + "-" + UUID.randomUUID();
         // When
-        boolean actual = customerJDBCDataAccessService.existsPersonWithEmail(email);
+        boolean actual = underTest.existsPersonWithEmail(email);
         // Then
         assertThat(actual).isFalse();
     }
@@ -113,17 +113,17 @@ class CustomerJDBCDataAccessServiceTest extends AbstractTestContainersUnitTest {
         // Given
         String email = FAKER.internet().emailAddress() + "-" + UUID.randomUUID();
         Customer customer = generateCustomer(email);
-        customerJDBCDataAccessService.insertCustomer(customer);
-        Integer id = customerJDBCDataAccessService
+        underTest.insertCustomer(customer);
+        Integer id = underTest
                 .selectAllCustomers()
                 .stream()
                 .filter(c -> c.getEmail().equals(email)).map(Customer::getId)
                 .findFirst()
                 .orElseThrow();
         // When
-        customerJDBCDataAccessService.deleteCustomerById(id);
+        underTest.deleteCustomerById(id);
         // Then
-        Optional<Customer> actual = customerJDBCDataAccessService.selectCustomerById(id);
+        Optional<Customer> actual = underTest.selectCustomerById(id);
         assertThat(actual).isNotPresent();
     }
 
@@ -132,15 +132,15 @@ class CustomerJDBCDataAccessServiceTest extends AbstractTestContainersUnitTest {
         // Given
         String email = FAKER.internet().emailAddress() + "-" + UUID.randomUUID();
         Customer customer = generateCustomer(email);
-        customerJDBCDataAccessService.insertCustomer(customer);
-        Integer id = customerJDBCDataAccessService
+        underTest.insertCustomer(customer);
+        Integer id = underTest
                 .selectAllCustomers()
                 .stream()
                 .filter(c -> c.getEmail().equals(email)).map(Customer::getId)
                 .findFirst()
                 .orElseThrow();
         // When
-        boolean actual = customerJDBCDataAccessService.existsPersonById(id);
+        boolean actual = underTest.existsPersonById(id);
         // Then
         assertThat(actual).isTrue();
     }
@@ -149,7 +149,7 @@ class CustomerJDBCDataAccessServiceTest extends AbstractTestContainersUnitTest {
         // Given
         int id = -1;
         // When
-        boolean actual = customerJDBCDataAccessService.existsPersonById(id);
+        boolean actual = underTest.existsPersonById(id);
         // Then
         assertThat(actual).isFalse();
     }
@@ -159,8 +159,8 @@ class CustomerJDBCDataAccessServiceTest extends AbstractTestContainersUnitTest {
         // Given
         String email = FAKER.internet().emailAddress() + "-" + UUID.randomUUID();
         Customer customer = generateCustomer(email);
-        customerJDBCDataAccessService.insertCustomer(customer);
-        Integer id = customerJDBCDataAccessService
+        underTest.insertCustomer(customer);
+        Integer id = underTest
                 .selectAllCustomers()
                 .stream()
                 .filter(c -> c.getEmail().equals(email)).map(Customer::getId)
@@ -172,9 +172,9 @@ class CustomerJDBCDataAccessServiceTest extends AbstractTestContainersUnitTest {
         Customer update = new Customer();
         update.setId(id);
         update.setName(newName);
-        customerJDBCDataAccessService.updateCustomer(update);
+        underTest.updateCustomer(update);
         // Then
-        Optional<Customer>actual = customerJDBCDataAccessService.selectCustomerById(id);
+        Optional<Customer>actual = underTest.selectCustomerById(id);
         assertThat(actual).isPresent().hasValueSatisfying(c -> {
             assertThat(c.getId()).isEqualTo(id);
             assertThat(c.getName()).isEqualTo(newName);
@@ -188,8 +188,8 @@ class CustomerJDBCDataAccessServiceTest extends AbstractTestContainersUnitTest {
         // Given
         String email = FAKER.internet().emailAddress() + "-" + UUID.randomUUID();
         Customer customer = generateCustomer(email);
-        customerJDBCDataAccessService.insertCustomer(customer);
-        Integer id = customerJDBCDataAccessService
+        underTest.insertCustomer(customer);
+        Integer id = underTest
                 .selectAllCustomers()
                 .stream()
                 .filter(c -> c.getEmail().equals(email)).map(Customer::getId)
@@ -201,9 +201,9 @@ class CustomerJDBCDataAccessServiceTest extends AbstractTestContainersUnitTest {
         Customer update = new Customer();
         update.setId(id);
         update.setEmail(newEmail);
-        customerJDBCDataAccessService.updateCustomer(update);
+        underTest.updateCustomer(update);
         // Then
-        Optional<Customer>actual = customerJDBCDataAccessService.selectCustomerById(id);
+        Optional<Customer>actual = underTest.selectCustomerById(id);
         assertThat(actual).isPresent().hasValueSatisfying(c -> {
             assertThat(c.getId()).isEqualTo(id);
             assertThat(c.getName()).isEqualTo(customer.getName());
@@ -217,8 +217,8 @@ class CustomerJDBCDataAccessServiceTest extends AbstractTestContainersUnitTest {
         // Given
         String email = FAKER.internet().emailAddress() + "-" + UUID.randomUUID();
         Customer customer = generateCustomer(email, 29);
-        customerJDBCDataAccessService.insertCustomer(customer);
-        Integer id = customerJDBCDataAccessService
+        underTest.insertCustomer(customer);
+        Integer id = underTest
                 .selectAllCustomers()
                 .stream()
                 .filter(c -> c.getEmail().equals(email)).map(Customer::getId)
@@ -230,9 +230,9 @@ class CustomerJDBCDataAccessServiceTest extends AbstractTestContainersUnitTest {
         Customer update = new Customer();
         update.setId(id);
         update.setAge(newAge);
-        customerJDBCDataAccessService.updateCustomer(update);
+        underTest.updateCustomer(update);
         // Then
-        Optional<Customer>actual = customerJDBCDataAccessService.selectCustomerById(id);
+        Optional<Customer>actual = underTest.selectCustomerById(id);
         assertThat(actual).isPresent().hasValueSatisfying(c -> {
             assertThat(c.getId()).isEqualTo(id);
             assertThat(c.getName()).isEqualTo(customer.getName());
@@ -246,8 +246,8 @@ class CustomerJDBCDataAccessServiceTest extends AbstractTestContainersUnitTest {
         String email = FAKER.internet().emailAddress() + "-" + UUID.randomUUID();
         Integer age = 29;
         Customer customer = generateCustomer(email, 29);
-        customerJDBCDataAccessService.insertCustomer(customer);
-        Integer id = customerJDBCDataAccessService
+        underTest.insertCustomer(customer);
+        Integer id = underTest
                 .selectAllCustomers()
                 .stream()
                 .filter(c -> c.getEmail().equals(email)).map(Customer::getId)
@@ -264,9 +264,9 @@ class CustomerJDBCDataAccessServiceTest extends AbstractTestContainersUnitTest {
         update.setAge(newAge);
         update.setName(newName);
         update.setEmail(newEmail);
-        customerJDBCDataAccessService.updateCustomer(update);
+        underTest.updateCustomer(update);
         // Then
-        Optional<Customer>actual = customerJDBCDataAccessService.selectCustomerById(id);
+        Optional<Customer>actual = underTest.selectCustomerById(id);
         assertThat(actual).isPresent().hasValue(update);
     }
 
@@ -279,8 +279,8 @@ class CustomerJDBCDataAccessServiceTest extends AbstractTestContainersUnitTest {
                 email,
                 20
         );
-        customerJDBCDataAccessService.insertCustomer(customer);
-        int id = customerJDBCDataAccessService.selectAllCustomers()
+        underTest.insertCustomer(customer);
+        Integer id = underTest.selectAllCustomers()
                 .stream()
                 .filter(c -> c.getEmail().equals(email))
                 .map(Customer::getId)
@@ -289,9 +289,9 @@ class CustomerJDBCDataAccessServiceTest extends AbstractTestContainersUnitTest {
         // When update without no changes
         Customer update = new Customer();
         update.setId(id);
-        customerJDBCDataAccessService.updateCustomer(update);
+        underTest.updateCustomer(update);
         // Then
-        Optional<Customer> actual = customerJDBCDataAccessService.selectCustomerById(id);
+        Optional<Customer> actual = underTest.selectCustomerById(id);
         assertThat(actual).isPresent().hasValueSatisfying(c -> {
             assertThat(c.getId()).isEqualTo(id);
             assertThat(c.getAge()).isEqualTo(customer.getAge());
