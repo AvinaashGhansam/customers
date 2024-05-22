@@ -21,7 +21,7 @@ import java.util.List;
 public class CustomerService {
     private final CustomerDao customerDao;
 
-    public CustomerService(@Qualifier("jpa") /*@Qualifier("jdbc")*/ CustomerDao customerDao, CustomerRepository customerRepository) {
+    public CustomerService(/*@Qualifier("jpa")*/ @Qualifier("jdbc") CustomerDao customerDao/*, CustomerRepository customerRepository*/) {
         this.customerDao = customerDao;
     }
 
@@ -30,7 +30,7 @@ public class CustomerService {
     }
 
     public Customer getCustomerById(Integer id) {
-        return customerDao.selectCustomerById(id).orElseThrow(() -> new ResourceNotFoundException(" customer with id[%s] not found".formatted(id)));
+        return customerDao.selectCustomerById(id).orElseThrow(() -> new ResourceNotFoundException("customer with id[%s] not found".formatted(id)));
     }
 
     public void addCustomer(CustomerRegistrationRequest customerRegistrationRequest) {
